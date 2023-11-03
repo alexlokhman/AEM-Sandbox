@@ -5,4 +5,7 @@
     <filter root="/apps/wknd/i18n"/>
     <filter root="/apps/fd/af/themes"/>
     <filter root="/apps/msm/wknd_blueprint" mode="merge"/>
+
+    <filter root="/etc/clientlibs/nl"/>
+    <filter root="/etc/languages"/>    
 </workspaceFilter>

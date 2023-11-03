@@ -277,7 +277,7 @@ Bundle-DocURL:
           <groupId>org.apache.jackrabbit</groupId>
           <artifactId>filevault-package-maven-plugin</artifactId>
           <extensions>true</extensions>
-          <version>1.1.6</version>
+          <version>1.1.8</version>
           <configuration>
             <filterSource>src/main/content/META-INF/vault/filter.xml</filterSource>
             <validatorsSettings>
@@ -288,6 +288,11 @@ Bundle-DocURL:
                   <cnds>tccl:aem.cnd</cnds>
                 </options>
               </jackrabbit-nodetypes>
+              <jackrabbit-packagetype>
+                <options>
+                  <immutableRootNodeNames>apps,libs,oak:index,etc</immutableRootNodeNames>
+                </options>
+              </jackrabbit-packagetype>
             </validatorsSettings>
           </configuration>
           <dependencies>
@@ -296,11 +301,6 @@ Bundle-DocURL:
               <artifactId>aem-nodetypes</artifactId>
               <version>6.5.7.0</version>
             </dependency>
-            <!-- <dependency>
-              <groupId>org.apache.jackrabbit.vault</groupId>
-              <artifactId>vault-validation</artifactId>
-              <version>3.5.6</version>
-            </dependency> -->
           </dependencies>
         </plugin>
         <!-- AEM Analyser Plugin -->

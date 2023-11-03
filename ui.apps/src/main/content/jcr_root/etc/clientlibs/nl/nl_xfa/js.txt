@@ -1,0 +1,4 @@
+/libs/fd/xfaforms/clientlibs/I18N/Namespace.js
+#base=javascript
+I18N.js
+/libs/fd/xfaforms/clientlibs/I18N/LogMessages.js
