@@ -6,6 +6,6 @@
     <filter root="/apps/fd/af/themes"/>
     <filter root="/apps/msm/wknd_blueprint" mode="merge"/>
 
-    <filter root="/etc/clientlibs/nl"/>
-    <filter root="/etc/languages"/>    
+    <filter root="/etc/clientlibs/languageguidesupport"/>
+    <filter root="/etc/languages"/>
 </workspaceFilter>
