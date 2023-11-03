@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  aem-author:
+    build:
+      context: ./
+      dockerfile: .docker/aem/Dockerfile
+      args:
+        # AEM_RUNMODE: "author"
+        IMAGE_VERSION: ${IMAGE_VERSION:-jdk11}
+    # container_name: "aem-author"
+    volumes:
+    - ./.docker/aem/aem-sdk:/aem/aem-sdk
+    ports:
+    - "4502:4502"
+    - "58242:58242"
+
+  aem-publish:
+    build:
+      context: ./
+      dockerfile: .docker/aem/Dockerfile
+      args:
+        AEM_RUNMODE: "publish"
+        AEM_PORT: "4503"
+        IMAGE_VERSION: ${IMAGE_VERSION:-jdk11}
+    # container_name: "aem-publish"
+    ports:
+    - "4503:4503"
+    - "58243:58242"
+
+  maven:
+    build:
+      context: .
+      dockerfile: .docker/maven/Dockerfile
+    # container_name: maven
+    volumes:
+    - .:/home/app
+    - ./.docker/maven/.m2/settings.xml:/root/.m2/settings.xml
+    - ./.docker/maven/scripts/main.sh:/home/main.sh
+
+  frontend:
+    build:
+      context: ./ui.frontend
+      dockerfile: ../.docker/frontend/Dockerfile
+      args:
+       NODE_VERSION: 16
+    volumes:
+      - ./ui.frontend:/var/www/html/
+      - /var/www/html/node_modules
+    ports:
+      - "8080:8080"
+    # container_name: frontend
+
+  frontend-react:
+    build:
+      context: ./ui.frontend.react
+      dockerfile: ../.docker/frontend.react/Dockerfile
+      args:
+       NODE_VERSION: 16
+    volumes:
+      - ./ui.frontend.react:/var/www/html/
+      - /var/www/html/node_modules
+    ports:
+      - "3000:3000"
+
+  dispatcher:
+    image: adobe/aem-ethos/dispatcher-publish:latest
+
+    depends_on:
+      - aem-author
+
+    environment:
+      AEM_HOST: "aem-publish"
+      AEM_PORT: "4503"
+
+    volumes:
+    - ./.docker/aem/aem-sdk/dispatcher/lib:/usr/lib/dispatcher-sdk:ro
+    - ./dispatcher/src:/mnt/dev/src:ro
+    - ./.docker/aem/aem-sdk/dispatcher/lib/import_sdk_config.sh:/docker_entrypoint.d/zzz-import-sdk-config.sh:ro 
+    - ./.docker/aem/aem-sdk/cache:/mnt/var/www
+    - ./.docker/aem/aem-sdk/dispatcher/bin:/mnt/dev/bin
+    ports:
+    - "8888:80"
